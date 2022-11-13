@@ -49,18 +49,8 @@ export default createStore({
       }
     },
     logIn(state, userData) {
-      let isLoggedIn = false;
-
-      if (state.usersDB.length) {
-        state.usersDB.some((user) => {
-          if (user.email === userData.email && user.password === userData.password) {
-            return (isLoggedIn = true);
-          } else {
-            isLoggedIn = false;
-          }
-        });
-
-        if (isLoggedIn) {
+      if (state.usersDB.some((user) => userData.email === user.email)) {
+        if (state.usersDB.some((user) => userData.password === user.password)) {
           state.loggedUser = userData.email;
           state.logged = true;
           state.loginModal = false;
@@ -68,10 +58,11 @@ export default createStore({
         } else {
           state.logged = false;
           console.log("Wrong email address or password.");
-        };
-      
+        }
       } else {
         state.logged = false;
+        state.loginModal = false;
+        state.registerModal = true;
         console.log("There is no registered user with that e-mail address.");
       }
     },
